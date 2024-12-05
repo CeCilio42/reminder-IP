@@ -75,7 +75,9 @@ function Sidebar({logout}) {
           <div className="flex items-center">
             <img src={user.picture} alt={user.name} className="h-10 w-10 rounded-full" />
             <div className="ml-3">
-              <p className="text-sm font-medium text-content1">{user.name}</p>
+			<Link to="/profile" className="group flex items-center rounded-lg px-3 py-2 text-content1 hover:bg-gray-4">
+            <span className="ml-3">{user.name}</span>
+          </Link>
               <button 
                 onClick={logout}
                 className="text-xs text-content2 hover:text-content1"
