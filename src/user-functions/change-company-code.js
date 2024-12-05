@@ -1,4 +1,4 @@
-export const handleChangeCompanyCode = async (userId, companyId) => {
+export const handleChangeCompanyCode = async (userId, companyId, password) => {
     try {
       
   
@@ -9,7 +9,8 @@ export const handleChangeCompanyCode = async (userId, companyId) => {
         },
         body: JSON.stringify({
           "userId": userId,
-          "companyId": companyId
+          "companyId": companyId,
+          "password": password
       }),
       });
   

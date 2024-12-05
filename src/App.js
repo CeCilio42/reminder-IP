@@ -6,15 +6,19 @@ import logo from './logo.svg';
 import Sidebar from './components/sidebar';
 import Topbar from './components/topbar';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Home from './pages/home';
 import Create from './pages/create';
 import Profile from './pages/profile';
 import Login from '../src/pages/login';
 import Company from './pages/company';
+import CalendarPage from './pages/calender';
 import { handleFetchReminders } from './reminder-functions/fetch-reminders';
 
 
-import '../src/tailwind.css';
+import './output.css';
 import Saved from './pages/saved';
 
 function App() {
@@ -23,6 +27,8 @@ function App() {
   const [reminders, setReminders] = useState([]);
   const [filteredReminders, setFilteredReminders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  
 
   useEffect(() => {
     const fetchReminders = async () => {
@@ -51,15 +57,18 @@ function App() {
 
   return (
     <div>
+     <ToastContainer />
       {isAuthenticated ? (
         <Router>
-          <div className="app">
-            <Sidebar />
-            <div className="main-content">
+          <div className="flex h-screen">
+            <Sidebar logout={logout}/>
+            <div className="flex flex-col flex-1">
               <Topbar 
               handleSearchInput={handleSearchInput}
               logout={logout} />
+              <main className='flex-1 p-4'>
               <Routes>
+                <Route path="/calender" element={<CalendarPage reminders={filteredReminders} />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/create" element={<ProtectedRoute component={Create} />} />
                 <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
@@ -67,6 +76,7 @@ function App() {
                 <Route path='/company' element={<ProtectedRoute component={Company}/>} />
                 <Route path='/saved' element={<ProtectedRoute component={Saved}/>} />
               </Routes>
+              </main>
             </div>
           </div>
         </Router>

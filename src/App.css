@@ -121,6 +121,8 @@ body {
 
 
 
+
+
 .search-container {
   margin-left: 50%;
 }
@@ -565,4 +567,131 @@ left:10%;
 
 .picture-placeholder:hover {
   background-color: #f0f8ff;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #1f1f1f; /* Light gray background */
+  color: #ffffff; /* Dark gray text */
+  border-radius: 8px;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  position: relative;
+}
+
+/* Modal Header */
+.modal-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #e0e0e0; /* Slightly darker gray */
+}
+
+/* Modal Footer Buttons */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-footer .btn {
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.btn-primary {
+  background-color: #4a6bb1; /* Blue */
+  color: #ffffff; /* White */
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8; /* Darker Blue */
+}
+
+.btn-error {
+  background-color: #dc2626; /* Red */
+  color: #ffffff; /* White */
+}
+
+.btn-error:hover {
+  background-color: #b91c1c; /* Darker Red */
+}
+
+.btn-secondary {
+  background-color: #6b7280; /* Gray */
+  color: #ffffff; /* White */
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563; /* Darker Gray */
+}
+
+.archive-button {
+  position: absolute;
+  top: 20px;
+  right: 40px; 
+  background-color: #505050; /* Light gray */
+  color: #ffffff; /* Dark gray */
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.archive-button:hover {
+  background-color: #9ca3af; /* Darker gray on hover */
+  color: #ffffff; /* White text on hover */
+}
+
+/* Input and Textarea Styling */
+.input,
+.textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db; /* Light border */
+  border-radius: 5px;
+  background-color: #ffffff; /* White */
+  color: #374151; /* Dark gray text */
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #2563eb; /* Blue border on focus */
+  box-shadow: 0 0 3px rgba(37, 99, 235, 0.5); /* Subtle blue glow */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 15px;
+    width: 90%;
+  }
+
+  .modal-header {
+    font-size: 1.25rem;
+  }
 }

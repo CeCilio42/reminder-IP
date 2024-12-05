@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import '../App.css';
 import { handleFetchCompanyReminders } from '../reminder-functions/fetch-reminders';
+import ReminderModal from '../modal/reminder-modal';
 
 const itemsPerPage = 4;
 
@@ -9,79 +9,104 @@ function Company() {
   const { user, getAccessTokenSilently } = useAuth0();
   const [reminders, setReminders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedReminder, setSelectedReminder] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchReminders = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const userId = user.sub; 
-        const reminders = await handleFetchCompanyReminders(userId);
-        setReminders(reminders);
-      } catch (error) {
-        console.error('Error fetching reminders:', error);
+        const userId = user.sub;
+        const remindersData = await handleFetchCompanyReminders(userId, token);
+        setReminders(remindersData);
+      } catch (err) {
+        setError('Failed to fetch reminders. Please try again later.');
+        console.error('Error fetching reminders:', err);
       }
     };
 
     fetchReminders();
   }, [getAccessTokenSilently, user]);
 
-  const handlePageChange = (direction) => {
-    setCurrentPage((prevPage) => {
-      if (direction === 'next') {
-        return prevPage + 1;
-      } else if (direction === 'prev') {
-        return prevPage - 1;
-      }
-      return prevPage;
-    });
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handleOpenModal = (reminder) => {
+    setSelectedReminder(reminder);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedReminder(null);
   };
 
   const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const paginatedReminders = reminders.slice(start, end);
+  const paginatedReminders = reminders.slice(start, start + itemsPerPage);
 
   return (
-    <div className="container">
-      <div className="reminder-block">
-        <ul className="reminder-list">
-          {paginatedReminders.map((reminder) => (
-            <li key={reminder.id}>
-              <div className="company-post-it">
-                <h2>{reminder.title}</h2>
-                <p>{reminder.description}</p>
-                <p>Date: {reminder.date}</p>
-                <p>Time: {reminder.start_time}</p>
-                <button className="menu-btn">Menu</button>
-                <div className="menu">
-                  <ul>
-                    <li><a href="#">Edit</a></li>
-                    <li><a href="#">Delete</a></li>
-                  </ul>
-                </div>
+    <div className="p-4">
+
+      {error && <p className="error-message">{error}</p>}
+
+      {/* Reminders Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {paginatedReminders.map((reminder) => (
+          <div key={reminder.id} className="card">
+            <div className="card-body">
+              <h2 className="card-header">{reminder.title}</h2>
+              <p className="text-content2">{reminder.description}</p>
+              <p className="text-content2">
+                {reminder.date} at {reminder.time}
+              </p>
+              <div className="card-footer">
+                <button
+                  className="btn-secondary btn"
+                  onClick={() => handleOpenModal(reminder)}
+                >
+                  Options
+                </button>
               </div>
-            </li>
-          ))}
-        </ul>
-        <div className="pagination">
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="pagination">
+        {[...Array(Math.ceil(reminders.length / itemsPerPage)).keys()].map((number) => (
           <button
-            id="prev-btn"
-            onClick={() => handlePageChange('prev')}
-            disabled={currentPage === 1}
+            key={number}
+            onClick={() => handlePageChange(number + 1)}
+            className={`pagination-button ${
+              currentPage === number + 1 ? 'active' : ''
+            }`}
           >
-            Previous
+            {number + 1}
           </button>
-          <span id="page-info">
-            Page {currentPage} of {Math.ceil(reminders.length / itemsPerPage)}
-          </span>
-          <button
-            id="next-btn"
-            onClick={() => handlePageChange('next')}
-            disabled={currentPage === Math.ceil(reminders.length / itemsPerPage)}
-          >
-            Next
-          </button>
+        ))}
+      </div>
+
+      {/* Next Activity */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
+        <div className="md:col-span-2 card">
+          <div className="card-body">
+            <h2 className="card-header">Next Activity</h2>
+            <p className="text-content2">Reminder 6</p>
+            <p className="text-content2">2024-11-06 at 15:00</p>
+          </div>
         </div>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <ReminderModal
+          reminder={selectedReminder}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }

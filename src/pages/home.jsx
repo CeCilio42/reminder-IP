@@ -1,23 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ReminderModal from '../modal/reminder-modal';
-import '../App.css';
+import '../output.css';
 
 function Home({ reminders }) {
-  const itemsPerPage = 4;
+  const ITEMS_PER_PAGE = 6;
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const [selectedReminder, setSelectedReminder] = useState(null);
 
-  const handlePageChange = (direction) => {
-    setCurrentPage((prevPage) => {
-      if (direction === 'next') {
-        return prevPage + 1;
-      } else if (direction === 'prev') {
-        return prevPage - 1;
-      }
-      return prevPage;
-    });
-  };
+  const paginatedReminders = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return reminders.slice(start, start + ITEMS_PER_PAGE);
+  }, [reminders, currentPage]);
+
+  const totalPages = useMemo(() => Math.ceil(reminders.length / ITEMS_PER_PAGE), [reminders.length]);
 
   const handleOpenModal = (reminder) => {
     setSelectedReminder(reminder);
@@ -29,47 +25,50 @@ function Home({ reminders }) {
     setSelectedReminder(null);
   };
 
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const paginatedReminders = reminders.slice(start, end);
-
   return (
-    <div className="container">
-      <div className="reminder-block">
-        <ul className="reminder-list">
-          {paginatedReminders.map((reminder) => (
-            <li key={reminder.id}>
-              <div className="post-it">
-                <h2>{reminder.title}</h2>
-                <p>{reminder.description}</p>
-                <p>Date: {reminder.date}</p>
-                <p>Time: {reminder.start_time}</p>
-                <button className="menu-btn" onClick={() => handleOpenModal(reminder)}>Menu</button>
+    <div className="p-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {paginatedReminders.map((reminder) => (
+          <div key={reminder.id} className="card">
+            <div className="card-body">
+              <h2 className="card-header">{reminder.title}</h2>
+              <p className="text-content2">{reminder.description}</p>
+              <p>
+                {reminder.date} at {reminder.time}
+              </p>
+              <div className="card-footer">
+                <button
+                  className="btn-secondary btn"
+                  onClick={() => handleOpenModal(reminder)}
+                >
+                  Options
+                </button>
               </div>
-            </li>
-          ))}
-        </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center mt-7">
         <div className="pagination">
-          <button
-            id="prev-btn"
-            onClick={() => handlePageChange('prev')}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <span id="page-info">
-            Page {currentPage} of {Math.ceil(reminders.length / itemsPerPage)}
-          </span>
-          <button
-            id="next-btn"
-            onClick={() => handlePageChange('next')}
-            disabled={currentPage === Math.ceil(reminders.length / itemsPerPage)}
-          >
-            Next
-          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`pagination-button ${currentPage === page ? 'active' : ''}`}
+            >
+              {page}
+            </button>
+          ))}
         </div>
       </div>
-      <ReminderModal show={showModal} onClose={handleCloseModal} reminder={selectedReminder} />
+      {/* Render Modal */}
+      {showModal && (
+        <ReminderModal
+          reminder={selectedReminder}
+          onClose={handleCloseModal}
+          onDelete={() => console.log(`Deleted reminder: ${selectedReminder?.id}`)}
+        />
+      )}
     </div>
   );
 }

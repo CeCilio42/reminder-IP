@@ -1,25 +1,24 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './styles/main.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react'; 
+import { Auth0Provider } from '@auth0/auth0-react';
+import LoadingSpinner from './components/LoadingSpinner';
 
-const domain = "dev-2dqix5advrmabtbz.us.auth0.com"; 
-const clientId = "AgEugtHWvj6teQjCRUAkvOs9eK67nPjZ"; 
+const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      redirectUri={window.location.origin}
-    >
+    <Suspense fallback={<LoadingSpinner />}>
+      <Auth0Provider
+        domain={domain}
+        clientId={clientId}
+        redirectUri={window.location.origin}
+      >
         <App />
-    </Auth0Provider>
+      </Auth0Provider>
+    </Suspense>
   </React.StrictMode>
 );
-
-reportWebVitals();

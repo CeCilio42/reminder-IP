@@ -8,9 +8,8 @@ function Login() {
 
   return (
     <div className="login-container">
-      <div className="login-block">
-        <img src={LoginPagePicture} alt='Logo'/>
-        <button id="login-btn" onClick={loginWithRedirect}>Login</button>
+      <div className="">
+        <button onClick={loginWithRedirect}>Login</button>
       </div>
     </div>
   );
