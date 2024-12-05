@@ -1,124 +1,93 @@
 import React, { useEffect } from 'react';
-
 import { Link } from 'react-router-dom';
 import '../output.css';
 import ReminderLogo from '../images/ReminderLogoPng.png'
-import HomeLogo from '../images/icons8-home-100.png'
-import CreateLogo from '../images/icons8-create-100.png'
-import SavedLogo from '../images/icons8-save-100.png'
-
 import { useAuth0 } from '@auth0/auth0-react';
 
-
 function Sidebar({logout}) {
-
-    const { user, getAccessTokenSilently } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   
-    useEffect(() => {
-      const fetchReminders = async () => {
-        try {
-          const token = await getAccessTokenSilently();
-          const userId = user.sub; 
-        } catch (error) {
-          console.error('Error fetching reminders:', error);
-        }
-      };
-  
-      fetchReminders();
-    }, [getAccessTokenSilently, user]);
+  useEffect(() => {
+    const fetchReminders = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const userId = user.sub;
+      } catch (error) {
+        console.error('Error fetching reminders:', error);
+      }
+    };
 
-    return (
-<div className="sticky flex h-screen flex-row gap-4 overflow-y-auto rounded-lg sm:overflow-x-hidden">
-	<aside className="sidebar-sticky sidebar justify-start">
-		<section className="sidebar-title items-center p-4">
-			<div className="flex flex-col">
-				<span>Reminder</span>
-				<span className="text-xs font-normal text-content2">User</span>
-			</div>
-		</section>
-		<section className="sidebar-content min-h-[20rem]">
-			<nav className="menu rounded-md">
-				<section className="menu-section px-4">
-					<span className="menu-title">Main menu</span>
-					<ul className="menu-items">
+    fetchReminders();
+  }, [getAccessTokenSilently, user]);
 
-						<li className="menu-item">
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-								<path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-							</svg>
-							<span><Link to="./company">Company</Link></span>
-						</li>
-						<li className="menu-item">
-							<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-								<path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-							</svg>
-							<span><Link to="/calender">Calendar</Link></span>
-						</li>
-						<li>
-							<input type="checkbox" id="menu-2" className="menu-toggle" />
-							<label className="menu-item justify-between" htmlFor="menu-2">
-								<div className="flex gap-2">
-									<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-										<path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-									</svg>
-									<span>Account</span>
-								</div>
+  return (
+    <aside className="fixed inset-y-0 left-0 z-50 w-64 transform bg-gray-2 transition-transform duration-200 ease-in-out">
+      <div className="flex h-full flex-col">
+        {/* Logo and Title */}
+        <div className="flex items-center gap-2 px-6 py-5">
+          <img src={ReminderLogo} alt="Reminder Logo" className="h-8 w-8" />
+          <div className="flex flex-col">
+            <span className="text-lg font-semibold text-content1">Reminder</span>
+            <span className="text-xs text-content2">Personal Assistant</span>
+          </div>
+        </div>
 
-								<span className="menu-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-										<path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-									</svg>
-								</span>
-							</label>
+        {/* Navigation */}
+        <nav className="flex-1 space-y-1 px-3 py-4">
+          <Link to="/" className="group flex items-center rounded-lg px-3 py-2 text-content1 hover:bg-gray-4">
+            <svg className="h-5 w-5 text-content2 group-hover:text-content1" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+            </svg>
+            <span className="ml-3">Home</span>
+          </Link>
 
-							<div className="menu-item-collapse">
-								<div className="min-h-0">
-                  					<label className='menu-item ml-6'><Link to="/company">Company</Link></label>
-									<label className="menu-item ml-6"><Link to="./profile">Information</Link></label>
-									<label className="menu-item ml-6" onClick={logout}>Log out</label>
-								</div>
-							</div>
-						</li>
+          <Link to="/company" className="group flex items-center rounded-lg px-3 py-2 text-content1 hover:bg-gray-4">
+            <svg className="h-5 w-5 text-content2 group-hover:text-content1" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+            </svg>
+            <span className="ml-3">Company</span>
+          </Link>
 
-						<li>
-						<label className="btn btn-primary menu-item mt-5" htmlFor="modal-2">
-							<Link to="./create">Add Reminder</Link>
-						</label>
+          <Link to="/calender" className="group flex items-center rounded-lg px-3 py-2 text-content1 hover:bg-gray-4">
+            <svg className="h-5 w-5 text-content2 group-hover:text-content1" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+            </svg>
+            <span className="ml-3">Calendar</span>
+          </Link>
 
-						</li>
+          <Link to="/saved" className="group flex items-center rounded-lg px-3 py-2 text-content1 hover:bg-gray-4">
+            <svg className="h-5 w-5 text-content2 group-hover:text-content1" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+            </svg>
+            <span className="ml-3">Saved</span>
+          </Link>
 
-					</ul>
-				</section>
-			</nav>
-		</section>
-		<section className="sidebar-footer bg-gray-2 pt-2">
-			<div className="divider my-0"></div>
-			<div className="dropdown z-50 flex h-fit w-full cursor-pointer hover:bg-gray-4">
-				<label className="whites mx-2 flex h-fit w-full cursor-pointer p-0 hover:bg-gray-4" tabIndex="0">
-					<div className="flex flex-row gap-4 p-4">
-						<div className="avatar avatar-md">
-							<img src={user.picture} alt="avatar" />
-						</div>
+          <Link to="/create" className="mt-6 flex items-center justify-center rounded-lg bg-blue-4 px-4 py-2 text-blue-11 hover:bg-blue-5">
+            <svg className="mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+            </svg>
+            Add Reminder
+          </Link>
+        </nav>
 
-						<div className="flex flex-col">
-							<span><Link to="./profile">{user.name}</Link></span>
-						</div>
-					</div>
-				</label>
-				<div className="dropdown-menu-right-top dropdown-menu ml-2">
-					<a className="dropdown-item text-sm">Profile</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Account settings</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Change email</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Subscriptions</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Change password</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Refer a friend</a>
-					<a tabIndex="-1" className="dropdown-item text-sm">Settings</a>
-				</div>
-			</div>
-		</section>
-	</aside>
-</div>
-    );
+        {/* User Profile */}
+        <div className="border-t border-gray-6 p-4">
+          <div className="flex items-center">
+            <img src={user.picture} alt={user.name} className="h-10 w-10 rounded-full" />
+            <div className="ml-3">
+              <p className="text-sm font-medium text-content1">{user.name}</p>
+              <button 
+                onClick={logout}
+                className="text-xs text-content2 hover:text-content1"
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
 }
 
 export default Sidebar;

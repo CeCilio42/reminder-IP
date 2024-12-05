@@ -17,7 +17,6 @@ import Company from './pages/company';
 import CalendarPage from './pages/calender';
 import { handleFetchReminders } from './reminder-functions/fetch-reminders';
 
-
 import './output.css';
 import Saved from './pages/saved';
 
@@ -28,13 +27,11 @@ function App() {
   const [filteredReminders, setFilteredReminders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  
-
   useEffect(() => {
     const fetchReminders = async () => {
       try {
         const token = await getAccessTokenSilently();
-        const userId = user.sub; // Assuming user.sub contains the user ID
+        const userId = user.sub;
         const reminders = await handleFetchReminders(userId);
         setReminders(reminders);
         setFilteredReminders(reminders);
@@ -56,26 +53,31 @@ function App() {
   };
 
   return (
-    <div>
-     <ToastContainer />
+    <div className="min-h-screen bg-gray-2">
+      <ToastContainer />
       {isAuthenticated ? (
         <Router>
-          <div className="flex h-screen">
-            <Sidebar logout={logout}/>
-            <div className="flex flex-col flex-1">
-              <Topbar 
-              handleSearchInput={handleSearchInput}
-              logout={logout} />
-              <main className='flex-1 p-4'>
-              <Routes>
-                <Route path="/calender" element={<CalendarPage reminders={filteredReminders} />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/create" element={<ProtectedRoute component={Create} />} />
-                <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
-                <Route path="/" element={<ProtectedRoute component={Home} reminders={filteredReminders} />} />
-                <Route path='/company' element={<ProtectedRoute component={Company}/>} />
-                <Route path='/saved' element={<ProtectedRoute component={Saved}/>} />
-              </Routes>
+          <div className="flex min-h-screen bg-gray-2">
+            <Sidebar logout={logout} />
+            <div className="flex flex-1 flex-col">
+              <div className="sticky top-0 z-10">
+                <Topbar 
+                  handleSearchInput={handleSearchInput}
+                  logout={logout}
+                />
+              </div>
+              <main className="flex-1 p-6 overflow-auto">
+                <div className="container mx-auto max-w-7xl">
+                  <Routes>
+                    <Route path="/calender" element={<CalendarPage reminders={filteredReminders} />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/create" element={<ProtectedRoute component={Create} />} />
+                    <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
+                    <Route path="/" element={<ProtectedRoute component={Home} reminders={filteredReminders} />} />
+                    <Route path='/company' element={<ProtectedRoute component={Company}/>} />
+                    <Route path='/saved' element={<ProtectedRoute component={Saved}/>} />
+                  </Routes>
+                </div>
               </main>
             </div>
           </div>
